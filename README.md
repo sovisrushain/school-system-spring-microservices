@@ -2,4 +2,4 @@
 
 ## Relationship ERD model
 
-![alt text](./assests/erd.png)
+![alt text](./assets/erd.png)
