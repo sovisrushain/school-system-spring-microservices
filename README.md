@@ -16,3 +16,17 @@ However, hard-coding the API call URLs in the Management-Service is considered a
 2. Dynamic URLs in the cloud.
 3. Load balancing is impossible with this method.
 4. We can have multiple environments.
+
+## 3. Discovery Server
+
+We have a design pattern called Service Discovery, an alternative to hard-coding URLs is to store them as application name in application.property file and use them as environment variables.
+
+![alt text](./assets/eureka.png)
+
+Using Eureka involves three basic steps:
+
+1. Setting up the Eureka server.
+2. Registering microservices to the Service Discovery.
+3. Consuming the response from the discovery to find a server.
+
+![alt text](./assets/console.png)
