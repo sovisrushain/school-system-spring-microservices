@@ -19,4 +19,5 @@ public class ManagementController {
     public Response getDetails(@PathVariable String studentId) {
         return managementService.getDetails(studentId);
     }
+
 }
