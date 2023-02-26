@@ -18,21 +18,21 @@ public class ManagementServiceImpl implements ManagementService {
     public Response getDetails(String studentId) {
         StudentDTO student = webClientBuilder.build()
                 .get()
-                .uri("http://localhost:8088/api/v1/student/" + studentId)
+                .uri("http://student-service/api/v1/student/" + studentId)
                 .retrieve()
                 .bodyToMono(StudentDTO.class)
                 .block();
 
         TeacherDTO teacher = webClientBuilder.build()
                 .get()
-                .uri("http://localhost:8087/api/v1/teacher/" + student.getTeacherId())
+                .uri("http://teacher-service/api/v1/teacher/" + student.getTeacherId())
                 .retrieve()
                 .bodyToMono(TeacherDTO.class)
                 .block();
 
         CourseDTO course = webClientBuilder.build()
                 .get()
-                .uri("http://localhost:8086/api/v1/course/" + teacher.getCourseId())
+                .uri("http://course-service/api/v1/course/" + teacher.getCourseId())
                 .retrieve()
                 .bodyToMono(CourseDTO.class)
                 .block();
