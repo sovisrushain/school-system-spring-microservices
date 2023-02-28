@@ -30,3 +30,10 @@ Using Eureka involves three basic steps:
 3. Consuming the response from the discovery to find a server.
 
 ![alt text](./assets/console.png)
+
+## 4. API Gateway
+
+![alt text](./assets/gateway.png)
+
+An API Gateway is a key component in a microservices architecture that sits between the microservices and the external clients, providing a single point of entry for all requests. It is responsible for routing incoming requests to the appropriate microservice, performing authentication and authorization, load balancing, and other tasks.
+
