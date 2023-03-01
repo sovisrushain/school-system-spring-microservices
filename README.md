@@ -37,3 +37,10 @@ Using Eureka involves three basic steps:
 
 An API Gateway is a key component in a microservices architecture that sits between the microservices and the external clients, providing a single point of entry for all requests. It is responsible for routing incoming requests to the appropriate microservice, performing authentication and authorization, load balancing, and other tasks.
 
+## 5. Circuit Breaker
+
+In Spring microservices, a circuit breaker is a design pattern used to prevent cascading failures in a distributed system.
+
+When one microservice fails, it can cause a chain reaction of failures in other dependent microservices, leading to a system-wide outage. Circuit breakers are used to prevent this by intercepting calls to dependent microservices and determining whether they are likely to fail. If a failure is likely, the circuit breaker opens and returns an error response to the calling service, rather than allowing the call to propagate to the dependent service.
+
+The circuit breaker will periodically try to close the circuit and allow calls to pass through again, but if the dependent service is still unavailable, the circuit will remain open. This helps to prevent system-wide failures and allows the system to recover more quickly from outages.
