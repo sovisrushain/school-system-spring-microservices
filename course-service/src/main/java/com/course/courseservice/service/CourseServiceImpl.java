@@ -9,6 +9,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,12 +51,18 @@ public class CourseServiceImpl implements CourseService {
     public List<CourseDTO> getAllCourses() {
         logger.info("CourseServiceImpl.class: getAllCourses(): start");
         List<CourseDAO> courseDAOList = courseRepository.findAll();
-        return courseDAOList.stream().map(courseDAO -> CourseDTO.builder()
-                .courseId(courseDAO.getCourseId())
-                .courseName(courseDAO.getCourseName())
-                .courseDuration(courseDAO.getCourseDuration())
-                .build())
-                .toList();
+        if (courseDAOList.isEmpty()) {
+            throw new ResourceNotFoundException("There are no courses yet");
+        }
+        List<CourseDTO> courseDTOList = new ArrayList<>();
+        courseDAOList.forEach(course -> {
+            CourseDTO dto = new CourseDTO();
+            dto.setCourseId(course.getCourseId());
+            dto.setCourseName(course.getCourseName());
+            dto.setCourseDuration(course.getCourseDuration());
+            courseDTOList.add(dto);
+        });
+        return courseDTOList;
     }
 
     @Override

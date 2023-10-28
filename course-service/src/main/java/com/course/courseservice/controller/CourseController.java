@@ -18,7 +18,7 @@ public class CourseController {
 
     private static final Logger logger = LogManager.getLogger(CourseController.class);
 
-    @PostMapping
+    @PostMapping("/")
     public String addNewCourse(@RequestBody CourseDTO courseDTO) {
         logger.info("CourseController.class: addNewCourse(): start");
         return courseService.addNewCourse(courseDTO);
@@ -30,7 +30,7 @@ public class CourseController {
         return courseService.getCourseById(courseId);
     }
 
-    @GetMapping
+    @GetMapping("/")
     public List<CourseDTO> getAllCourses() {
         logger.info("CourseController.class: getAllCourses(): start");
         return courseService.getAllCourses();
