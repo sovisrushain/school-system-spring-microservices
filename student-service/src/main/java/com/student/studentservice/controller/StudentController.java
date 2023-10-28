@@ -18,7 +18,7 @@ public class StudentController {
 
     private static final Logger logger = LogManager.getLogger(StudentController.class);
 
-    @PostMapping
+    @PostMapping("/")
     public String saveStudent(@RequestBody StudentDTO studentDTO) {
         logger.info("StudentController.class: saveStudent(): start");
         return studentService.saveStudent(studentDTO);
@@ -30,7 +30,7 @@ public class StudentController {
         return studentService.getStudentById(studentId);
     }
 
-    @GetMapping
+    @GetMapping("/")
     public List<StudentDTO> findAllStudents() {
         logger.info("StudentController.class: findAllStudents(): start");
         return studentService.findAllStudents();
