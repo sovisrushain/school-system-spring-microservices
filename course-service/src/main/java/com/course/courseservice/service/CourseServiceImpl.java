@@ -2,8 +2,10 @@ package com.course.courseservice.service;
 
 import com.course.courseservice.dto.CourseDTO;
 import com.course.courseservice.model.CourseDAO;
-import com.course.courseservice.repository.CourseRepository;;
+import com.course.courseservice.repository.CourseRepository;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,8 +17,11 @@ public class CourseServiceImpl implements CourseService {
 
     private final CourseRepository courseRepository;
 
+    private static final Logger logger = LogManager.getLogger(CourseServiceImpl.class);
+
     @Override
     public String addNewCourse(CourseDTO courseDTO) {
+        logger.info("CourseServiceImpl.class: addNewCourse(): start");
         CourseDAO courseDAO = CourseDAO.builder()
                 .courseId(courseDTO.getCourseId())
                 .courseName(courseDTO.getCourseName())
@@ -28,6 +33,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public CourseDTO getCourseById(String courseId) {
+        logger.info("CourseServiceImpl.class: getCourseById(): start");
         Optional<CourseDAO> course = courseRepository.findById(courseId);
         return CourseDTO.builder()
                 .courseId(course.get().getCourseId())
@@ -38,6 +44,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public List<CourseDTO> getAllCourses() {
+        logger.info("CourseServiceImpl.class: getAllCourses(): start");
         List<CourseDAO> courseDAOList = courseRepository.findAll();
         return courseDAOList.stream().map(courseDAO -> CourseDTO.builder()
                 .courseId(courseDAO.getCourseId())
@@ -49,6 +56,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public String deleteCourseById(String courseId) {
+        logger.info("CourseServiceImpl.class: deleteCourseById(): start");
         courseRepository.deleteById(courseId);
         return courseId;
     }
