@@ -1,6 +1,7 @@
 package com.teacher.teacherservice.service;
 
 import com.teacher.teacherservice.dto.TeacherDTO;
+import com.teacher.teacherservice.exception.ResourceNotFoundException;
 import com.teacher.teacherservice.model.TeacherDAO;
 import com.teacher.teacherservice.repository.TeacherRepository;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +9,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,6 +37,9 @@ public class TeacherServiceImpl implements TeacherService {
     public TeacherDTO getTeacherById(String teacherId) {
         logger.info("TeacherServiceImpl.class: getTeacherById(): start");
         Optional<TeacherDAO> teacher = teacherRepository.findById(teacherId);
+        if (teacher.isEmpty()) {
+            throw new ResourceNotFoundException("There is no teacher associated with given teacherId");
+        }
         return TeacherDTO.builder()
                 .teacherId(teacher.get().getTeacherId())
                 .courseId(teacher.get().getCourseId())
@@ -46,11 +51,18 @@ public class TeacherServiceImpl implements TeacherService {
     public List<TeacherDTO> getAllTeachers() {
         logger.info("TeacherServiceImpl.class: getAllTeachers(): start");
         List<TeacherDAO> teacherList = teacherRepository.findAll();
-        return teacherList.stream().map(teacher -> TeacherDTO.builder()
-                .teacherId(teacher.getTeacherId())
-                .courseId(teacher.getCourseId())
-                .teacherName(teacher.getTeacherName())
-                .build()).toList();
+        if (teacherList.isEmpty()) {
+            throw new ResourceNotFoundException("There are no teachers yet");
+        }
+        List<TeacherDTO> teacherDTOList = new ArrayList<>();
+        teacherList.forEach(teacher -> {
+            TeacherDTO dto = new TeacherDTO();
+            dto.setTeacherId(teacher.getTeacherId());
+            dto.setTeacherName(teacher.getTeacherName());
+            dto.setCourseId(teacher.getCourseId());
+            teacherDTOList.add(dto);
+        });
+        return teacherDTOList;
     }
 
     @Override

@@ -18,7 +18,7 @@ public class TeacherController {
 
     private static final Logger logger = LogManager.getLogger(TeacherController.class);
 
-    @PostMapping
+    @PostMapping("/")
     public String saveTeacher(@RequestBody TeacherDTO teacherDTO) {
         logger.info("TeacherController.class: saveTeacher(): start");
         return teacherService.saveTeacher(teacherDTO);
@@ -30,7 +30,7 @@ public class TeacherController {
         return teacherService.getTeacherById(teacherId);
     }
 
-    @GetMapping
+    @GetMapping("/")
     public List<TeacherDTO> getAllTeachers() {
         logger.info("TeacherController.class: getAllTeachers(): start");
         return teacherService.getAllTeachers();
