@@ -6,6 +6,11 @@ import com.management.managementservice.dto.StudentDTO;
 import com.management.managementservice.dto.TeacherDTO;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -13,44 +18,64 @@ import org.springframework.web.reactive.function.client.WebClient;
 @RequiredArgsConstructor
 public class ManagementServiceImpl implements ManagementService {
 
+    @Value("${student.service.url}")
+    private String studentServiceURL;
+
+    @Value("${teacher.service.url}")
+    private String teacherServiceURL;
+
+    @Value("${course.service.url}")
+    private String courseServiceURL;
+
+    @Value("${fallback.msg.symbol}")
+    private String fallbackMsg;
+
     private final WebClient.Builder webClientBuilder;
+
+    private static final Logger logger = LogManager.getLogger(ManagementServiceImpl.class);
 
     @Override
     @CircuitBreaker(name = "management-api", fallbackMethod = "fallbackResponse")
-    public Response getDetails(String studentId) {
+    public ResponseEntity<Response> getDetails(String studentId) {
+        logger.info("ManagementServiceImpl.class: getDetails(): start");
         StudentDTO student = webClientBuilder.build()
                 .get()
-                .uri("http://student-service/api/v1/student/" + studentId)
+                .uri(studentServiceURL + studentId)
                 .retrieve()
                 .bodyToMono(StudentDTO.class)
                 .block();
 
         TeacherDTO teacher = webClientBuilder.build()
                 .get()
-                .uri("http://teacher-service/api/v1/teacher/" + student.getTeacherId())
+                .uri(teacherServiceURL + student.getTeacherId())
                 .retrieve()
                 .bodyToMono(TeacherDTO.class)
                 .block();
 
         CourseDTO course = webClientBuilder.build()
                 .get()
-                .uri("http://course-service/api/v1/course/" + teacher.getCourseId())
+                .uri(courseServiceURL + teacher.getCourseId())
                 .retrieve()
                 .bodyToMono(CourseDTO.class)
                 .block();
 
-        return Response.builder()
+        Response response = Response.builder()
                 .studentName(student.getStudentName())
                 .teacherName(teacher.getTeacherName())
                 .courseName(course.getCourseName())
                 .build();
+        logger.info("ManagementServiceImpl.class: getDetails(): end");
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    public Response fallbackResponse(Exception exception) {
-        return Response.builder()
-                .studentName(":(")
-                .teacherName(":(")
-                .courseName(":(")
+    public ResponseEntity<Response> fallbackResponse(Exception exception) {
+        logger.warn("ManagementController.class: fallbackResponse(): start");
+        Response response = Response.builder()
+                .studentName(fallbackMsg)
+                .teacherName(fallbackMsg)
+                .courseName(fallbackMsg)
                 .build();
+        logger.warn("ManagementController.class: fallbackResponse(): end");
+        return new ResponseEntity<>(response, HttpStatus.SERVICE_UNAVAILABLE);
     }
 }
