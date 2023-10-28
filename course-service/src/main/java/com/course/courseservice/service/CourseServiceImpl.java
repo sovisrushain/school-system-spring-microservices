@@ -1,6 +1,7 @@
 package com.course.courseservice.service;
 
 import com.course.courseservice.dto.CourseDTO;
+import com.course.courseservice.exception.ResourceNotFoundException;
 import com.course.courseservice.model.CourseDAO;
 import com.course.courseservice.repository.CourseRepository;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +36,9 @@ public class CourseServiceImpl implements CourseService {
     public CourseDTO getCourseById(String courseId) {
         logger.info("CourseServiceImpl.class: getCourseById(): start");
         Optional<CourseDAO> course = courseRepository.findById(courseId);
+        if (course.isEmpty()) {
+            throw new ResourceNotFoundException("No course is associated with the provided courseId");
+        }
         return CourseDTO.builder()
                 .courseId(course.get().getCourseId())
                 .courseName(course.get().getCourseName())
