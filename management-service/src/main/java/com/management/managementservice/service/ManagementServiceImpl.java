@@ -4,6 +4,7 @@ import com.management.managementservice.dto.CourseDTO;
 import com.management.managementservice.dto.Response;
 import com.management.managementservice.dto.StudentDTO;
 import com.management.managementservice.dto.TeacherDTO;
+import com.management.managementservice.exception.ResourceNotFoundException;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
@@ -31,6 +32,9 @@ public class ManagementServiceImpl implements ManagementService {
 
     @Value("${fallback.msg.symbol}")
     private String fallbackMsg;
+
+    @Value("${error.code.student.not-present}")
+    private String studentNotPresentErrorMsg;
 
     private final WebClient.Builder webClientBuilder;
 
@@ -72,6 +76,9 @@ public class ManagementServiceImpl implements ManagementService {
 
     public ResponseEntity<Response> fallbackResponse(Exception exception) {
         logger.warn("ManagementController.class: fallbackResponse(): start");
+        if (exception.getMessage().contains(studentNotPresentErrorMsg)) {
+            throw new ResourceNotFoundException("There is no student available for the given studentId");
+        }
         Response response = Response.builder()
                 .studentName(fallbackMsg)
                 .teacherName(fallbackMsg)
