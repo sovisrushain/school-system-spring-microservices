@@ -76,7 +76,9 @@ public class ManagementServiceImpl implements ManagementService {
 
     public ResponseEntity<Response> fallbackResponse(Exception exception) {
         logger.warn("ManagementController.class: fallbackResponse(): start");
+        logger.error(exception.getMessage());
         if (exception.getMessage().contains(studentNotPresentErrorMsg)) {
+            logger.warn("There is no student available for the given studentId");
             throw new ResourceNotFoundException("There is no student available for the given studentId");
         }
         Response response = Response.builder()
@@ -84,7 +86,6 @@ public class ManagementServiceImpl implements ManagementService {
                 .teacherName(fallbackMsg)
                 .courseName(fallbackMsg)
                 .build();
-        logger.error(exception.getMessage());
         logger.warn("ManagementController.class: fallbackResponse(): end");
         return new ResponseEntity<>(response, HttpStatus.SERVICE_UNAVAILABLE);
     }
