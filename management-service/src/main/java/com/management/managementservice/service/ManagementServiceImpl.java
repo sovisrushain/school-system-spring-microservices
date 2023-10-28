@@ -14,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.util.Objects;
+
 @Service
 @RequiredArgsConstructor
 public class ManagementServiceImpl implements ManagementService {
@@ -47,14 +49,14 @@ public class ManagementServiceImpl implements ManagementService {
 
         TeacherDTO teacher = webClientBuilder.build()
                 .get()
-                .uri(teacherServiceURL + student.getTeacherId())
+                .uri(teacherServiceURL + Objects.requireNonNull(student).getTeacherId())
                 .retrieve()
                 .bodyToMono(TeacherDTO.class)
                 .block();
 
         CourseDTO course = webClientBuilder.build()
                 .get()
-                .uri(courseServiceURL + teacher.getCourseId())
+                .uri(courseServiceURL + Objects.requireNonNull(teacher).getCourseId())
                 .retrieve()
                 .bodyToMono(CourseDTO.class)
                 .block();
@@ -62,7 +64,7 @@ public class ManagementServiceImpl implements ManagementService {
         Response response = Response.builder()
                 .studentName(student.getStudentName())
                 .teacherName(teacher.getTeacherName())
-                .courseName(course.getCourseName())
+                .courseName(Objects.requireNonNull(course).getCourseName())
                 .build();
         logger.info("ManagementServiceImpl.class: getDetails(): end");
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -75,6 +77,7 @@ public class ManagementServiceImpl implements ManagementService {
                 .teacherName(fallbackMsg)
                 .courseName(fallbackMsg)
                 .build();
+        logger.error(exception.getMessage());
         logger.warn("ManagementController.class: fallbackResponse(): end");
         return new ResponseEntity<>(response, HttpStatus.SERVICE_UNAVAILABLE);
     }
