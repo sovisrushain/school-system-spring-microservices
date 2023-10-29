@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Response {
+public class SearchStudentResponse {
     private String studentName;
     private String teacherName;
     private String courseName;

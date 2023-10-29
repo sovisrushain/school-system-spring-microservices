@@ -1,21 +1,20 @@
 package com.management.managementservice.service;
 
-import com.management.managementservice.dto.CourseDTO;
-import com.management.managementservice.dto.Response;
-import com.management.managementservice.dto.StudentDTO;
-import com.management.managementservice.dto.TeacherDTO;
+import com.management.managementservice.dto.*;
 import com.management.managementservice.exception.ResourceNotFoundException;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import java.util.Objects;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -42,7 +41,7 @@ public class ManagementServiceImpl implements ManagementService {
 
     @Override
     @CircuitBreaker(name = "management-api", fallbackMethod = "fallbackResponse")
-    public ResponseEntity<Response> getDetails(String studentId) {
+    public ResponseEntity<SearchStudentResponse> getDetails(String studentId) {
         logger.info("ManagementServiceImpl.class: getDetails(): start");
         StudentDTO student = webClientBuilder.build()
                 .get()
@@ -65,7 +64,7 @@ public class ManagementServiceImpl implements ManagementService {
                 .bodyToMono(CourseDTO.class)
                 .block();
 
-        Response response = Response.builder()
+        SearchStudentResponse response = SearchStudentResponse.builder()
                 .studentName(student.getStudentName())
                 .teacherName(teacher.getTeacherName())
                 .courseName(Objects.requireNonNull(course).getCourseName())
@@ -74,14 +73,61 @@ public class ManagementServiceImpl implements ManagementService {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    public ResponseEntity<Response> fallbackResponse(Exception exception) {
+    @Override
+    public ResponseEntity<List<CourseDetailsResponse>> getAllCourseDetails() {
+        List<CourseDetailsResponse> detailList = new ArrayList<>();
+        List<CourseDTO> courseList = webClientBuilder.build()
+                .get()
+                .uri(courseServiceURL)
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .bodyToMono(new ParameterizedTypeReference<List<CourseDTO>>() {
+                })
+                .block();
+
+        if (courseList == null) {
+            logger.error("ManagementServiceImpl.class: getDetails():There are no courses yet");
+            throw new ResourceNotFoundException("There are no courses yet");
+        }
+
+        List<TeacherDTO> teachersList = webClientBuilder.build()
+                .get()
+                .uri(teacherServiceURL)
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .bodyToMono(new ParameterizedTypeReference<List<TeacherDTO>>() {
+                })
+                .block();
+
+        if (teachersList == null) {
+            logger.error("ManagementServiceImpl.class: getDetails():There are no courses yet");
+            throw new ResourceNotFoundException("There are no courses yet");
+        }
+
+        courseList.forEach(course -> {
+            CourseDetailsResponse response = new CourseDetailsResponse();
+             response.setCourseId(course.getCourseId());
+             response.setCourseName(course.getCourseName());
+             response.setCourseDuration(course.getCourseDuration());
+             teachersList.forEach(teacher -> {
+                 if (teacher.getCourseId().equals(course.getCourseId())) {
+                     response.setTeacherName(teacher.getTeacherName());
+                 }
+             });
+            detailList.add(response);
+        });
+
+        return new ResponseEntity<>(detailList, HttpStatus.OK);
+    }
+
+    public ResponseEntity<SearchStudentResponse> fallbackResponse(Exception exception) {
         logger.warn("ManagementController.class: fallbackResponse(): start");
         logger.error(exception.getMessage());
         if (exception.getMessage().contains(studentNotPresentErrorMsg)) {
             logger.warn("There is no student available for the given studentId");
             throw new ResourceNotFoundException("There is no student available for the given studentId");
         }
-        Response response = Response.builder()
+        SearchStudentResponse response = SearchStudentResponse.builder()
                 .studentName(fallbackMsg)
                 .teacherName(fallbackMsg)
                 .courseName(fallbackMsg)
