@@ -1,1 +1,17 @@
-<p>save-student works!</p>
+<div>
+  <div>
+    <label>Student Id</label>
+    <input [(ngModel)]="studentId" type="text" id="student-id" required="required">
+  </div>
+  <div>
+    <label>Student Name</label>
+    <input [(ngModel)]="studentName" type="text" id="student-name" required="required">
+  </div>
+  <div>
+    <label for="categoryDropdown">Course Code</label>
+    <select id="categoryDropdown" [(ngModel)]="selectedCategory">
+      <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+    </select>
+  </div>
+  <button (click)="onSave()">Save</button>
+</div>

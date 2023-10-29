@@ -6,5 +6,12 @@ import { Component } from '@angular/core';
   styleUrls: ['./save-student.component.css']
 })
 export class SaveStudentComponent {
+  categories: string[] = ["C001", "C002", "C003"];
+  selectedCategory: string = "";
+  studentId: string = ""
+  studentName: string = ""
 
+  onSave() {
+    // save student
+  }
 }
