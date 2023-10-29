@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import {DataServiceService} from "../../service/data/data-service.service";
+import {SearchStudentModel} from "../../model/SearchStudentModel";
 
 @Component({
   selector: 'app-search-student',
@@ -8,19 +9,20 @@ import {DataServiceService} from "../../service/data/data-service.service";
 })
 export class SearchStudentComponent {
   studentId: string = ""
-  studentName: string = ""
-  teacherName: string = ""
-  courseName: string = ""
+
+  studentDetail: SearchStudentModel = new SearchStudentModel("", "", "")
 
   constructor(private dataService: DataServiceService) { }
 
   onSearch() {
-    this.dataService.getStudentDetail(this.studentId).subscribe(
-      res => {
-        this.studentName = res.studentName
-        this.teacherName = res.teacherName
-        this.courseName = res.courseName
-      }
-    )
+    if (this.studentId != "") {
+      this.dataService.getStudentDetail(this.studentId).subscribe(
+        res => {
+          this.studentDetail.studentName = res.studentName
+          this.studentDetail.teacherName = res.teacherName
+          this.studentDetail.courseName = res.courseName
+        }
+      )
+    }
   }
 }
