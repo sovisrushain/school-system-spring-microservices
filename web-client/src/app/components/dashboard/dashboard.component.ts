@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {DataServiceService} from "../../service/data/data-service.service";
 
 @Component({
   selector: 'app-dashboard',
@@ -6,5 +7,17 @@ import { Component } from '@angular/core';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent {
+
+  constructor(private dataService: DataServiceService) { }
+
+  onOnInit() {
+    this.fetchCourseDetails()
+  }
+
+  fetchCourseDetails() {
+    this.dataService.getAllCourseDetails().subscribe(
+      res => console.log(res)
+    )
+  }
 
 }
