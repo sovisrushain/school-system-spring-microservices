@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import {DataServiceService} from "../../service/data/data-service.service";
 import {CourseDetailItem} from "../../model/CourseDetailItem";
+import {StudentSaveModel} from "../../model/StudentSaveModel";
 
 @Component({
   selector: 'app-save-student',
@@ -12,6 +13,7 @@ export class SaveStudentComponent {
   selectedCategory: string = "";
   studentId: string = ""
   studentName: string = ""
+  student = new StudentSaveModel("", "", "")
 
   constructor(private dataService: DataServiceService) {
   }
@@ -21,7 +23,14 @@ export class SaveStudentComponent {
   }
 
   onSave() {
-    // save student
+    this.student = new StudentSaveModel(this.studentId, this.studentName, this.selectedCategory)
+    this.dataService.postStudent(this.student).subscribe(
+      res => {
+        this.studentId = ""
+        this.studentName = ""
+        this.selectedCategory = ""
+      }
+    )
   }
 
   fetchAllCourses() {
