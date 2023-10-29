@@ -1,8 +1,6 @@
 package com.teacher.teacherservice.service;
 
 import com.teacher.teacherservice.dto.TeacherDTO;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 

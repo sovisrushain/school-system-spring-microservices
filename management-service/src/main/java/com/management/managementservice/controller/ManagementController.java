@@ -1,6 +1,7 @@
 package com.management.managementservice.controller;
 
 import com.management.managementservice.dto.CourseDetailsResponse;
+import com.management.managementservice.dto.SaveStudentRequest;
 import com.management.managementservice.dto.SearchStudentResponse;
 import com.management.managementservice.service.ManagementService;
 import lombok.RequiredArgsConstructor;
@@ -29,8 +30,14 @@ public class ManagementController {
 
     @GetMapping("/course-details")
     public ResponseEntity<List<CourseDetailsResponse>> getAllCourseDetails() {
-        logger.info("ManagementController.class: getDetails(): start");
+        logger.info("ManagementController.class: getAllCourseDetails(): start");
         return managementService.getAllCourseDetails();
+    }
+
+    @PostMapping("/save-student")
+    public ResponseEntity<String> saveStudent(@RequestBody SaveStudentRequest saveStudentRequest) {
+        logger.info("ManagementController.class: saveStudent(): start");
+        return managementService.saveStudent(saveStudentRequest);
     }
 
 }

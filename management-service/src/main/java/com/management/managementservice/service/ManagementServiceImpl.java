@@ -8,13 +8,16 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 @RequiredArgsConstructor
@@ -75,6 +78,7 @@ public class ManagementServiceImpl implements ManagementService {
 
     @Override
     public ResponseEntity<List<CourseDetailsResponse>> getAllCourseDetails() {
+        logger.info("ManagementServiceImpl.class: getAllCourseDetails(): start");
         List<CourseDetailsResponse> detailList = new ArrayList<>();
         List<CourseDTO> courseList = webClientBuilder.build()
                 .get()
@@ -86,7 +90,7 @@ public class ManagementServiceImpl implements ManagementService {
                 .block();
 
         if (courseList == null) {
-            logger.error("ManagementServiceImpl.class: getDetails():There are no courses yet");
+            logger.error("ManagementServiceImpl.class: getAllCourseDetails():There are no courses yet");
             throw new ResourceNotFoundException("There are no courses yet");
         }
 
@@ -100,7 +104,7 @@ public class ManagementServiceImpl implements ManagementService {
                 .block();
 
         if (teachersList == null) {
-            logger.error("ManagementServiceImpl.class: getDetails():There are no courses yet");
+            logger.error("ManagementServiceImpl.class: getAllCourseDetails():There are no courses yet");
             throw new ResourceNotFoundException("There are no courses yet");
         }
 
@@ -114,10 +118,66 @@ public class ManagementServiceImpl implements ManagementService {
                      response.setTeacherName(teacher.getTeacherName());
                  }
              });
+            logger.info("ManagementServiceImpl.class: getAllCourseDetails(): start");
             detailList.add(response);
         });
 
         return new ResponseEntity<>(detailList, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<String> saveStudent(SaveStudentRequest saveStudentRequest) {
+        logger.warn("ManagementController.class: saveStudent(): start");
+        AtomicReference<TeacherDTO> teacher = new AtomicReference<>();
+        CourseDTO course = webClientBuilder.build()
+                .get()
+                .uri(courseServiceURL + saveStudentRequest.getCourseId())
+                .retrieve()
+                .bodyToMono(CourseDTO.class)
+                .block();
+
+        if (course == null) {
+            logger.error("ManagementServiceImpl.class: getAllCourseDetails():There is no course associated with given courseId");
+            throw new ResourceNotFoundException("There is no course associated with given courseId");
+        }
+
+        List<TeacherDTO> teachersList = webClientBuilder.build()
+                .get()
+                .uri(teacherServiceURL)
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .bodyToMono(new ParameterizedTypeReference<List<TeacherDTO>>() {
+                })
+                .block();
+
+        if (teachersList == null || teachersList.isEmpty()) {
+            logger.error("ManagementServiceImpl.class: getAllCourseDetails():There are no teachers");
+            throw new ResourceNotFoundException("There are no teachers");
+        }
+
+        teachersList.forEach(t -> {
+            if (t.getCourseId().equals(course.getCourseId())) {
+                teacher.set(t);
+            }
+        });
+
+        StudentDTO studentDTO = StudentDTO.builder()
+                .studentId(saveStudentRequest.getStudentId())
+                .studentName(saveStudentRequest.getStudentName())
+                .teacherId(teacher.get().getTeacherId())
+                .build();
+
+        String response = webClientBuilder.build()
+                .post()
+                .uri(studentServiceURL)
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .body(Mono.just(studentDTO), StudentDTO.class)
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
+
+        logger.warn("ManagementController.class: saveStudent(): end");
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     public ResponseEntity<SearchStudentResponse> fallbackResponse(Exception exception) {
