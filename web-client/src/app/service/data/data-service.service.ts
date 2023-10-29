@@ -11,4 +11,8 @@ export class DataServiceService {
   getAllCourseDetails() {
     return this.http.get<any>("http://localhost:8084/management-service/api/v1/management/course-details")
   }
+
+  getStudentDetail(studentId: string) {
+    return this.http.get<any>("http://localhost:8084/management-service/api/v1/management/" + studentId)
+  }
 }

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {DataServiceService} from "../../service/data/data-service.service";
 
 @Component({
   selector: 'app-search-student',
@@ -11,7 +12,15 @@ export class SearchStudentComponent {
   teacherName: string = ""
   courseName: string = ""
 
+  constructor(private dataService: DataServiceService) { }
+
   onSearch() {
-    // search
+    this.dataService.getStudentDetail(this.studentId).subscribe(
+      res => {
+        this.studentName = res.studentName
+        this.teacherName = res.teacherName
+        this.courseName = res.courseName
+      }
+    )
   }
 }
