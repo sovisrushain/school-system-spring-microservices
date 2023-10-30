@@ -16,8 +16,8 @@ export class DashboardComponent {
 
   fetchCourseDetails() {
     this.dataService.getAllCourseDetails().subscribe(
-      res => console.log(res)
-    )
+      response => {
+      console.log(response)
+    })
   }
-
 }
