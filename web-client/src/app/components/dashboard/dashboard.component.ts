@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import {DataServiceService} from "../../service/data/data-service.service";
+import {DashBoardCourseData} from "../../model/DashBoardCourseData";
 
 @Component({
   selector: 'app-dashboard',
@@ -8,16 +9,18 @@ import {DataServiceService} from "../../service/data/data-service.service";
 })
 export class DashboardComponent {
 
+  courseDetailList: DashBoardCourseData[] = []
+
   constructor(private dataService: DataServiceService) { }
 
-  onOnInit() {
+  ngOnInit() {
     this.fetchCourseDetails()
   }
 
   fetchCourseDetails() {
     this.dataService.getAllCourseDetails().subscribe(
-      response => {
-      console.log(response)
-    })
+      value => {
+        value.map((c: DashBoardCourseData) => this.courseDetailList.push(c))
+      })
   }
 }

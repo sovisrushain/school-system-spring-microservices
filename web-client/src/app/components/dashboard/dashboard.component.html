@@ -6,14 +6,16 @@
     <tr>
       <th>Course Code</th>
       <th>Course Name</th>
+      <th>Duration</th>
       <th>Teacher</th>
     </tr>
     </thead>
     <tbody>
-    <tr>
-      <td>dummy</td>
-      <td>dummy</td>
-      <td>dummy</td>
+    <tr *ngFor="let course of courseDetailList">
+      <td>{{course.courseId}}</td>
+      <td>{{course.courseName}}</td>
+      <td>{{course.courseDuration}}</td>
+      <td>{{course.teacherName}}</td>
     </tr>
     </tbody>
   </table>
