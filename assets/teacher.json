@@ -1,0 +1,27 @@
+[
+  {
+    "teacherId": "T001",
+    "courseId": "C001",
+    "teacherName": "Laura Davis"
+  },
+  {
+    "teacherId": "T002",
+    "courseId": "C002",
+    "teacherName": "Jason Collins"
+  },
+  {
+    "teacherId": "T003",
+    "courseId": "C003",
+    "teacherName": "Karen Walker"
+  },
+  {
+    "teacherId": "T004",
+    "courseId": "C004",
+    "teacherName": "Paul Donaldson"
+  },
+  {
+    "teacherId": "T005",
+    "courseId": "C005",
+    "teacherName": "Dave Smith"
+  }
+]

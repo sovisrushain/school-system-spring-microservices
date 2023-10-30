@@ -1,0 +1,27 @@
+[
+  {
+    "courseId": "C001",
+    "courseName": "DSA",
+    "courseDuration": 4
+  },
+  {
+    "courseId": "C002",
+    "courseName": "Linear Algebra",
+    "courseDuration": 4
+  },
+  {
+    "courseId": "C003",
+    "courseName": "OOP",
+    "courseDuration": 4
+  },
+  {
+    "courseId": "C004",
+    "courseName": "Computer Networking",
+    "courseDuration": 4
+  },
+  {
+    "courseId": "C005",
+    "courseName": "Calculus",
+    "courseDuration": 4
+  }
+]

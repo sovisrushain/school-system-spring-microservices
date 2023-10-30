@@ -1,0 +1,17 @@
+[
+  {
+    "studentId": "S001",
+    "teacherId": "T002",
+    "studentName": "Erica Ferguson"
+  },
+  {
+    "studentId": "S002",
+    "teacherId": "T001",
+    "studentName": "Ethan Lewis"
+  },
+  {
+    "studentId": "S003",
+    "teacherId": "T003",
+    "studentName": "Christopher Dudley"
+  }
+]
