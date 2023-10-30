@@ -1,53 +1,38 @@
 .header {
-  background-color: #3498db;
-  color: #ffffff;
-  padding: 10px 0;
+  background-color: #007bff; /* Blue background color for the header */
+  color: #fff; /* White text color */
+  padding: 20px 0; /* Adjust the padding as needed */
 }
 
-.header nav {
+.nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
+  width: 80%; /* Adjust the width as needed */
+  margin: 0 auto; /* Center the nav horizontally */
 }
 
 .logo {
-  font-size: 24px;
+  font-size: 24px; /* Adjust the font size as needed */
   font-weight: bold;
 }
 
-.nav-list {
-  list-style: none;
+.nav-list, .auth-list {
+  list-style-type: none;
+  padding: 0;
   display: flex;
-  gap: 20px;
 }
 
-.nav-item a {
+.nav-item, .auth-item {
+  margin-right: 20px; /* Adjust the margin between menu items as needed */
+}
+
+.nav-item a, .auth-item a {
   text-decoration: none;
-  color: #ffffff;
-  font-weight: 500;
-  transition: color 0.3s;
+  color: #fff; /* White text color for links */
+  font-size: 16px; /* Adjust the font size as needed */
 }
 
-.nav-item a:hover {
-  color: #ffcc29;
-}
-
-.auth-list {
-  list-style: none;
-  display: flex;
-  gap: 20px;
-}
-
-.auth-item a {
-  text-decoration: none;
-  color: #ffffff;
-  font-weight: 500;
-  transition: color 0.3s;
-}
-
-.auth-item a:hover {
-  color: #ffcc29;
+.nav-item a:hover, .auth-item a:hover {
+  text-decoration: underline; /* Underline links on hover */
 }
