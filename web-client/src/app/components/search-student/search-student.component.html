@@ -1,10 +1,11 @@
-<div>
-  <label>Search Student by Student Id</label>
-  <input [(ngModel)]="studentId" type="text" id="student-id" required="required">
+<div class="container">
+  <label for="student-id">Search Student by Student Id</label>
+  <input [(ngModel)]="studentId" type="text" id="student-id" required="required" class="input-field">
 </div>
-<button (click)="onSearch()">Search</button>
-<div *ngIf="studentDetail.studentName">
-  <p>Student Name : {{studentDetail.studentName}}</p>
-  <p>Teacher Name : {{studentDetail.teacherName}}</p>
-  <p>Course Name : {{studentDetail.courseName}}</p>
+<button (click)="onSearch()" class="search-button">Search</button>
+<div *ngIf="studentDetail.studentName" class="result-container">
+  <p>Student Name: {{ studentDetail.studentName }}</p>
+  <p>Teacher Name: {{ studentDetail.teacherName }}</p>
+  <p>Course Name: {{ studentDetail.courseName }}</p>
 </div>
+
