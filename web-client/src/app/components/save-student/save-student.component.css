@@ -1,47 +1,42 @@
-/* Center the component on the page */
-div {
+.container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 80vh;
+  height: 100vh;
   text-align: center;
+  font-size: 18px;
 }
 
-/* Style the form elements and button */
-div div, button {
-  margin: 10px 0;
-  width: 100%;
-  max-width: 300px;
-  text-align: left;
+.form-group {
+  margin-bottom: 20px;
 }
 
 label {
-  display: block;
+  font-size: 16px;
   font-weight: bold;
+  display: block;
 }
 
-input, select, button {
+.input-field, .select-field {
   width: 100%;
   padding: 10px;
   border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: 4px;
   font-size: 16px;
 }
 
-/* Style the button */
-button {
-  background-color: #3498db;
+.save-button {
+  background-color: #007bff;
   color: #fff;
-  border: none;
-  border-radius: 5px;
   padding: 10px 20px;
-  font-size: 18px;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
   cursor: pointer;
-  transition: background-color 0.3s;
-  text-align: center;
+  transition: background-color 0.3s ease;
 }
 
-button:hover {
-  background-color: #2076c5;
+.save-button:hover {
+  background-color: #0056b3;
 }

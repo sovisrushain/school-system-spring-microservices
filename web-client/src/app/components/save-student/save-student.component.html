@@ -1,17 +1,18 @@
-<div>
-  <div>
-    <label>Student Id</label>
-    <input [(ngModel)]="studentId" type="text" id="student-id" required="required">
+<div class="container">
+  <div class="form-group">
+    <label for="student-id">Student Id</label>
+    <input [(ngModel)]="studentId" type="text" id="student-id" required="required" class="input-field">
   </div>
-  <div>
-    <label>Student Name</label>
-    <input [(ngModel)]="studentName" type="text" id="student-name" required="required">
+  <div class="form-group">
+    <label for="student-name">Student Name</label>
+    <input [(ngModel)]="studentName" type="text" id="student-name" required="required" class="input-field">
   </div>
-  <div>
+  <div class="form-group">
     <label for="categoryDropdown">Course Code</label>
-    <select id="categoryDropdown" [(ngModel)]="selectedCategory">
+    <select id="categoryDropdown" [(ngModel)]="selectedCategory" class="select-field">
       <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
     </select>
   </div>
-  <button (click)="onSave()">Save</button>
+  <button (click)="onSave()" class="save-button">Save</button>
 </div>
+
